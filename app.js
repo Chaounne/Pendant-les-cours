@@ -122,6 +122,7 @@ function getRandomSafeSpot() {
 
   let playerId;
   let playerRef;
+  let playerHistoryRef;
   let players = {};
   let playerElements = {};
   let coins = {};
@@ -157,6 +158,9 @@ function getRandomSafeSpot() {
       firebase.database().ref(`coins/${key}`).remove();
       playerRef.update({
         coins: players[playerId].coins + 1,
+      })
+      playerHistoryRef.update({
+        coins: players[playerId].coins,
       })
     }
   }
@@ -289,6 +293,9 @@ function getRandomSafeSpot() {
       playerRef.update({
         name: newName
       })
+      playerHistoryRef.update({
+        name: newName
+      })
     })
 
     chatButton.addEventListener("click", () => {
@@ -319,6 +326,9 @@ function getRandomSafeSpot() {
       playerRef.update({
         color: nextColor
       })
+      playerHistoryRef.update({
+        color: nextColor
+      })
     })
 
     //Place my first coin
@@ -340,22 +350,20 @@ function getRandomSafeSpot() {
       //Check if the player is in the database
         isPlayerInDatabase(playerId).then((isInDatabase) => {
             if (isInDatabase) {
-            //get the number of coins and the name of the player from the database
-            playerRef.once("value", (snapshot) => {
-                const playerData = snapshot.val();
-                if (playerData) {
-                return;
-                }
-                playerRef.set({
-                id: playerId,
-                name,
-                direction: "right",
-                color: randomFromArray(playerColors),
-                x,
-                y,
-                coins: 0,
-                })
-            })
+            playerHistoryRef = firebase.database().ref(`players_history/${playerId}`);
+            //get the number of coins and the name of the player from the database to the PlayerRef
+                playerHistoryRef.once("value", (snapshot) => {
+                    const playerHistory = snapshot.val();
+                    playerRef.update({
+                        id: playerId,
+                        name: playerHistory.name,
+                        coins: playerHistory.coins,
+                        color: playerHistory.color,
+                        x,
+                        y,
+
+                    })
+                  })
             return;
             }
             //Add the player to the database players_history and players
@@ -380,6 +388,8 @@ function getRandomSafeSpot() {
             })
         })
 
+      //Save data to the database when the player leaves
+      playerRef.onDisconnect().remove();
 
       //Begin the game now that we are signed in
       initGame();

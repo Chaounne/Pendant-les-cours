@@ -23,20 +23,21 @@ html, body {
 }
 
 .chat {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 1em;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em; /* Ajoute une marge pour éviter que le tchat ne soit collé aux bords */
   display: flex;
+  flex-direction: column;
   gap: 0.5em;
-  align-items: flex-end
+  align-items: flex-end;
+  margin-bottom: 100px;
 }
-
 .chat-container{
   overflow-y:auto;
   height: 100%;
   /*set a limited height*/
-  max-height: 100px;
+  max-height: 150px;
 }
 
 .player-info {
@@ -167,3 +168,4 @@ button:active {
 .Coin_shadow {
   background: url(/images/coin-shadow.png) no-repeat no-repeat;
 }
+

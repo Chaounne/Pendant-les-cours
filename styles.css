@@ -33,11 +33,17 @@ html, body {
   align-items: flex-end;
   margin-bottom: 100px;
 }
+
+.chat-bg{
+
+}
+
 .chat-container{
   overflow-y:auto;
   height: 100%;
   /*set a limited height*/
   max-height: 150px;
+  background-color: rgba(0,0,0,0.44);
 }
 
 .player-info {

@@ -29,6 +29,13 @@ function getKeyString(x, y) {
   return `${x}x${y}`;
 }
 
+//Check if a player uid is in the database
+function isPlayerInDatabase(uid) {
+  return firebase.database().ref(`players_history/${uid}`).once("value").then((snapshot) => {
+    return snapshot.val() !== null;
+  })
+}
+
 function createName() {
   const prefix = randomFromArray([
     "GROS",
@@ -239,7 +246,6 @@ function getRandomSafeSpot() {
     })
 
 
-    //New - not in the video!
     //This block will remove coins from local state when Firebase `coins` value updates
     allCoinsRef.on("value", (snapshot) => {
       coins = snapshot.val() || {};
@@ -321,9 +327,8 @@ function getRandomSafeSpot() {
   }
 
   firebase.auth().onAuthStateChanged((user) => {
-    console.log(user)
     if (user) {
-      //You're logged in!
+      //Logged in!
       playerId = user.uid;
       playerRef = firebase.database().ref(`players/${playerId}`);
 
@@ -332,23 +337,54 @@ function getRandomSafeSpot() {
 
       const {x, y} = getRandomSafeSpot();
 
+      //Check if the player is in the database
+        isPlayerInDatabase(playerId).then((isInDatabase) => {
+            if (isInDatabase) {
+            //get the number of coins and the name of the player from the database
+            playerRef.once("value", (snapshot) => {
+                const playerData = snapshot.val();
+                if (playerData) {
+                return;
+                }
+                playerRef.set({
+                id: playerId,
+                name,
+                direction: "right",
+                color: randomFromArray(playerColors),
+                x,
+                y,
+                coins: 0,
+                })
+            })
+            return;
+            }
+            //Add the player to the database players_history and players
+              firebase.database().ref(`players_history/${playerId}`).set({
+              id: playerId,
+              name,
+              direction: "right",
+              color: randomFromArray(playerColors),
+              x,
+              y,
+              coins: 0,
+            })
+            //If the player is not in the database, create a new player
+            playerRef.set({
+            id: playerId,
+            name,
+            direction: "right",
+            color: randomFromArray(playerColors),
+            x,
+            y,
+            coins: 0,
+            })
+        })
 
-      playerRef.set({
-        id: playerId,
-        name,
-        direction: "right",
-        color: randomFromArray(playerColors),
-        x,
-        y,
-        coins: 0,
-      })
-
-      playerRef.onDisconnect().remove();
 
       //Begin the game now that we are signed in
       initGame();
     } else {
-      //You're logged out.
+      //Logged out.
     }
   })
 

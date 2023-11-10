@@ -1,11 +1,11 @@
 <html>
   <head>
-    <title>Pendant les cours</title>
+    <title>Pendant les cours...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=2" type="text/css">
+    <link rel="stylesheet" href="/styles.css?v=4" type="text/css">
   </head>
   <body>
     <div class="game-container"></div>
@@ -44,17 +44,18 @@
     
       <div>
         <label for="chat-message">Chat</label>
-        
-      
         <input id="chat-message" maxlength="144" type="text" />    <button id="chat-button">Envoyer</button>
       </div>
       <div class="chat-container" >
       </div>
     </div>
  
+    <div class="leaderboard">
+        <h1>Leaderboard - Pièces</h1>
+        <div class="leaderboard-container">
+        </div>
+    </div>
 
-   
-  
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -71,7 +72,7 @@
       firebase.initializeApp(firebaseConfig);
     </script>
 
-    <script src="/KeyPressListener.js?v=2"></script>
-    <script src="/app.js?v=2"></script>
+    <script src="/KeyPressListener.js?v=4"></script>
+    <script src="/app.js?v=4"></script>
   </body>
 </html>

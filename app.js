@@ -38,6 +38,8 @@ function isPlayerInDatabase(uid) {
   })
 }
 
+
+
 function createName() {
   const prefix = randomFromArray([
     "GROS",
@@ -137,6 +139,30 @@ function getRandomSafeSpot() {
   const messageInput = document.querySelector("#chat-message");
   const chatContainer = document.querySelector(".chat-container");
   const chatButton = document.querySelector("#chat-button");
+  const leaderboardContainer = document.querySelector(".leaderboard-container");
+
+  //Put the 5 richest players in the leaderboard-container, the players are in the database in the players_history section
+  function updateLeaderboard() {
+    const leaderboardRef = firebase.database().ref("players_history");
+    leaderboardRef.once("value").then((snapshot) => {
+      const leaderboard = snapshot.val();
+      const sortedLeaderboard = Object.entries(leaderboard)
+          .sort((a, b) => b[1].coins - a[1].coins)
+          .slice(0, 5);
+
+      let leaderboardHTML = "";
+      let i = 0;
+      for (let [uid, player] of sortedLeaderboard) {
+        i++;
+        leaderboardHTML += `
+        <div class="leaderboard-player">
+          <div class="leaderboard-infos"> ${i} - ${player.name} : ${player.coins} Pièces</div>
+        </div>
+      `;
+      }
+      leaderboardContainer.innerHTML = leaderboardHTML;
+    });
+  }
 
 
   function placeCoin() {
@@ -188,6 +214,8 @@ function getRandomSafeSpot() {
 
   function initGame() {
 
+    updateLeaderboard();
+
     new KeyPressListener("ArrowUp", () => handleArrowPress(0, -1))
     new KeyPressListener("ArrowDown", () => handleArrowPress(0, 1))
     new KeyPressListener("ArrowLeft", () => handleArrowPress(-1, 0))
@@ -218,6 +246,7 @@ document.getElementById("rightButton").addEventListener("click", () => handleArr
         const top = 16 * characterState.y - 4 + "px";
         el.style.transform = `translate3d(${left}, ${top}, 0)`;
       })
+
     })
     allPlayersRef.on("child_added", (snapshot) => {
       //Fires whenever a new node is added the tree
@@ -261,6 +290,7 @@ document.getElementById("rightButton").addEventListener("click", () => handleArr
     //This block will remove coins from local state when Firebase `coins` value updates
     allCoinsRef.on("value", (snapshot) => {
       coins = snapshot.val() || {};
+      updateLeaderboard();
     });
     //
 

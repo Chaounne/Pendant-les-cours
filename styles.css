@@ -1,7 +1,9 @@
 * {
   box-sizing:border-box;
 }
-
+div{
+  border:solid red ;
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -12,7 +14,11 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-
+.titre{
+  width: 100%;
+  min-width: 350px;
+  align-items: center;
+}
 .game-container { 
   position: relative;
   width: 240px;
@@ -26,29 +32,45 @@ html, body {
   position: fixed;
   bottom: 0;
   right: 0;
-  margin: 1em; /* Ajoute une marge pour éviter que le tchat ne soit collé aux bords */
+  margin: 1em; 
   display: flex;
   flex-direction: column;
   gap: 0.5em;
   align-items: flex-end;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
+    display: none;
 }
-
+.Arrows{
+  display: none;
+  margin-top: 120%;
+  position: absolute;
+}
+.Arrows-2{
+  display: none;
+  margin-top: 138%;
+  position: absolute;
+}
 .chat-container{
   overflow-y:auto;
-  height: 100%;
+  max-height: 100%;
   /*set a limited height*/
-  max-height: 150px;
+  max-height: 120px;
   /*background-color: rgba(0,0,0,0.44);*/
+}
+.buttonChat{
+  margin-left: 95%; 
+  margin-top: 26%;
+  position: absolute;
 }
 
 .player-info {
   position: absolute;
   top: 0;
+  
+  width: 100%;
   padding: 1em;
   display: flex;
   gap: 0.5em;
-  align-items: flex-end
 }
 
 label {
@@ -75,7 +97,26 @@ input[type="text"] {
 input[type="text"]:focus {
   border-color: #f000ff;
 }
-
+.Arrows button {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  background: #00000052;
+  max-width: 100%;
+  max-height: 100%;
+  border: 0;
+  border-bottom: 2px solid #1e830b;
+  cursor: pointer;
+}
+.Arrows-2 button {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  background: #00000052;
+  max-width: 100%;
+  max-height: 100%;
+  border: 0;
+  border-bottom: 2px solid #1e830b;
+  cursor: pointer;
+}
 button {
   padding-left: 0.5em;
   padding-right: 0.5em;
@@ -171,3 +212,38 @@ button:active {
   background: url(/images/coin-shadow.png) no-repeat no-repeat;
 }
 
+/* Mobile Styles */
+@media only screen and (max-width: 600px) {
+  .Arrows{
+    display:block;
+    
+  }
+  .Arrows-2{
+    display:block;
+    
+  }
+  .game-container {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    background: url(map.png) no-repeat no-repeat;
+    max-width: 100%;
+    image-rendering: pixelated;}
+
+  .chat {
+    margin: 1em;
+   
+  }
+
+.chat-container{
+  overflow-y:auto;
+  max-height: 100%;
+  /*set a limited height*/
+  max-height: 90px;
+  /*background-color: rgba(0,0,0,0.44);*/
+}
+
+  input[type="text"] {
+    width: 100%;
+  }
+}

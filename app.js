@@ -193,6 +193,12 @@ function getRandomSafeSpot() {
     new KeyPressListener("ArrowLeft", () => handleArrowPress(-1, 0))
     new KeyPressListener("ArrowRight", () => handleArrowPress(1, 0))
 
+    document.getElementById("upButton").addEventListener("click", () => handleArrowPress(0, -1));
+document.getElementById("downButton").addEventListener("click", () => handleArrowPress(0, 1));
+document.getElementById("leftButton").addEventListener("click", () => handleArrowPress(-1, 0));
+document.getElementById("rightButton").addEventListener("click", () => handleArrowPress(1, 0));
+
+
     const allPlayersRef = firebase.database().ref(`players`);
     const allCoinsRef = firebase.database().ref(`coins`);
     const allChatRef = firebase.database().ref(`chat`);
@@ -409,3 +415,21 @@ function getRandomSafeSpot() {
 
 
 })();
+// Sélectionnez le bouton et le conteneur du tchat
+const openChatButton = document.getElementById('openChatButton');
+const chatContainer = document.querySelector('.chat');
+
+// Initialisez une variable pour suivre l'état du tchat
+let isChatOpen = false;
+
+// Ajoutez un écouteur d'événements sur le clic du bouton
+openChatButton.addEventListener('click', () => {
+  // Inversez l'état du tchat
+  isChatOpen = !isChatOpen;
+
+  // Mettez à jour le texte du bouton en fonction de l'état
+  openChatButton.innerHTML = isChatOpen ? '<i class="fas fa-comment"></i>  ' : '<i class="fas fa-comment"></i>  ';
+
+  // Affichez ou masquez le conteneur du tchat en fonction de l'état
+  chatContainer.style.display = isChatOpen ? 'flex' : 'none';
+});

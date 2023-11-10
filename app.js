@@ -151,10 +151,12 @@ function getRandomSafeSpot() {
           .slice(0, 5);
 
       let leaderboardHTML = "";
+      let i = 0;
       for (let [uid, player] of sortedLeaderboard) {
+        i++;
         leaderboardHTML += `
         <div class="leaderboard-player">
-          <div class="leaderboard-name">${player.name} : ${player.coins}</div>
+          <div class="leaderboard-infos"> ${i} - ${player.name} : ${player.coins} Pièces</div>
         </div>
       `;
       }

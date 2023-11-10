@@ -1,9 +1,7 @@
 * {
   box-sizing:border-box;
 }
-div{
-  border:solid red ;
-}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -27,7 +25,15 @@ html, body {
   transform: scale(3);
   image-rendering: pixelated;
 }
-
+.loading-bar {
+  position: absolute;
+  top: -20px; /* Adjust this value based on your layout */
+  left: 0;
+  height: 2px;
+  width: 0%; /* Set initial width to 0 */
+  background-color: #0026ff; /* Green color for the loading bar */
+  transition: width 2s linear; /* Transition effect for the width change */
+}
 .chat {
   position: fixed;
   bottom: 0;
@@ -36,9 +42,9 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  align-items: flex-end;
+  align-items: flex-start;
   margin-bottom: 10px;
-    display: none;
+  display: none;
 }
 .Arrows{
   display: none;

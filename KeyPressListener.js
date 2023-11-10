@@ -16,6 +16,7 @@ class KeyPressListener {
    };
    document.addEventListener("keydown", this.keydownFunction);
    document.addEventListener("keyup", this.keyupFunction);
+   
   }
 
   unbind() { 

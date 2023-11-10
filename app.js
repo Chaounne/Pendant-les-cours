@@ -1,3 +1,5 @@
+let gameStarted=false;
+let loadEnd=false;
 
 
 const mapData = {
@@ -8,10 +10,11 @@ const mapData = {
   blockedSpaces: {
     "7x4": true,
     "1x11": true,
+    
     "12x10": true,
-    "4x7": true,
+   
     "5x7": true,
-    "6x7": true,
+    
     "8x6": true,
     "9x6": true,
     "10x6": true,
@@ -19,6 +22,9 @@ const mapData = {
     "8x9": true,
     "9x9": true,
   },
+  interactiveBlock:{
+    "5x7":true,
+  }
 };
 
 const playerColors = ["blue", "red", "orange", "yellow", "green", "purple"];
@@ -89,6 +95,24 @@ function isSolid(x,y) {
       y < mapData.minY
   )
 }
+function isAdjacentToInteractiveBlock(x, y) {
+  const adjacentPositions = [
+    { x: x + 1, y: y }, // Droite
+    { x: x - 1, y: y }, // Gauche
+    { x: x, y: y + 1 }, // Bas
+    { x: x, y: y - 1 }, // Haut
+  ];
+
+  for (const pos of adjacentPositions) {
+    const key = getKeyString(pos.x, pos.y);
+    if (mapData.interactiveBlock[key]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 
 function getRandomSafeSpot() {
   //We don't look things up by key here, so just return an x/y
@@ -167,36 +191,107 @@ function getRandomSafeSpot() {
     }
   }
 
-
-  function handleArrowPress(xChange=0, yChange=0) {
+function handleArrowPress(xChange = 0, yChange = 0, key) {
+  // Check if the game is not started or if it's started and loading has ended
+  if (!gameStarted || (gameStarted && loadEnd)) {
     const newX = players[playerId].x + xChange;
     const newY = players[playerId].y + yChange;
+
+    if (key === "Space") {
+      const currentPlayer = players[playerId];
+      const x = currentPlayer.x;
+      const y = currentPlayer.y;
+
+      if (isAdjacentToInteractiveBlock(x, y)) {
+        // If adjacent to an interactive block, start the game
+        startGame(currentPlayer);
+        console.log("2");
+        loadEnd = false;
+      }
+    }
+
     if (!isSolid(newX, newY)) {
-      //move to the next space
+      // Move to the next space if it's not solid
       players[playerId].x = newX;
       players[playerId].y = newY;
+
+      // Update player direction
       if (xChange === 1) {
         players[playerId].direction = "right";
       }
       if (xChange === -1) {
         players[playerId].direction = "left";
       }
+
+      // Update player data in the database
       playerRef.set(players[playerId]);
+
+      // Attempt to grab a coin at the new position
       attemptGrabCoin(newX, newY);
     }
   }
+}
+
+function startGame(player) {
+  gameStarted = true;
+
+  // Get the current player element
+  const currentPlayerElement = playerElements[player.id];
+
+  // Create or select the loading bar element
+  let loadingBar = currentPlayerElement.querySelector('.loading-bar');
+  if (!loadingBar) {
+    // If loading bar doesn't exist, create it
+    loadingBar = document.createElement('div');
+    loadingBar.classList.add('loading-bar');
+     loadingBar.style.width = '100%';
+    currentPlayerElement.appendChild(loadingBar);
+  } else {
+    console.log("1");
+
+    // Check if the loading bar is already at 0%
+    if (loadingBar.style.width === "0%") {
+      // If so, set it to 100%
+      loadingBar.style.width = '100%';
+
+      // Append the loading bar to the player element
+      currentPlayerElement.appendChild(loadingBar);
+
+      console.log("2");
+      console.log(loadingBar.style.width);
+    }
+  }
+
+  // Set the width to 100% to show the loading bar
+  loadingBar.style.width = '100%';
+
+  // Reset the width to 0% before starting the timeout to hide it
+  setTimeout(() => {
+    loadingBar.style.width = '0%';
+
+    // Set the width back to 0% to hide the loading bar after 2 seconds
+    setTimeout(() => {
+      gameStarted = false;
+      loadEnd = true;
+    }, 2200);
+  }, 1);
+}
+
+
+  
 
   function initGame() {
-
+    
+    new KeyPressListener("Space", ()=>handleArrowPress(0,0,"Space"))
     new KeyPressListener("ArrowUp", () => handleArrowPress(0, -1))
     new KeyPressListener("ArrowDown", () => handleArrowPress(0, 1))
     new KeyPressListener("ArrowLeft", () => handleArrowPress(-1, 0))
     new KeyPressListener("ArrowRight", () => handleArrowPress(1, 0))
 
-    document.getElementById("upButton").addEventListener("click", () => handleArrowPress(0, -1));
-document.getElementById("downButton").addEventListener("click", () => handleArrowPress(0, 1));
-document.getElementById("leftButton").addEventListener("click", () => handleArrowPress(-1, 0));
-document.getElementById("rightButton").addEventListener("click", () => handleArrowPress(1, 0));
+  document.getElementById("upButton").addEventListener("click", () => handleArrowPress(0, -1));
+  document.getElementById("downButton").addEventListener("click", () => handleArrowPress(0, 1));
+  document.getElementById("leftButton").addEventListener("click", () => handleArrowPress(-1, 0));
+  document.getElementById("rightButton").addEventListener("click", () => handleArrowPress(1, 0));
 
 
     const allPlayersRef = firebase.database().ref(`players`);

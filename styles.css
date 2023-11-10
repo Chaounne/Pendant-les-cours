@@ -2,6 +2,15 @@
   box-sizing:border-box;
 }
 
+
+body{
+  overflow: hidden;
+}
+
+div{
+  border:solid red ;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -25,6 +34,7 @@ html, body {
   transform: scale(3);
   image-rendering: pixelated;
 }
+
 .loading-bar {
   position: absolute;
   top: -20px; /* Adjust this value based on your layout */
@@ -34,6 +44,34 @@ html, body {
   background-color: #0026ff; /* Green color for the loading bar */
   transition: width 2s linear; /* Transition effect for the width change */
 }
+
+.leaderboard{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1em;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: flex-start;
+    background-color: rgba(0,0,0,0.44);
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.leaderboard-container{
+  overflow-y:hidden;
+  height: 100%;
+  font-size: 15px;
+  max-height: 170px;
+}
+
+
 .chat {
   position: fixed;
   bottom: 0;

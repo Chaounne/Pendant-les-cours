@@ -50,7 +50,6 @@ const gameContainer = document.querySelector(".game-container");
 const playerNameInput = document.querySelector("#player-name");
 const playerColorButton = document.querySelector("#player-color");
 const messageInput = document.querySelector("#chat-message");
-const chatContainer = document.querySelector(".chat-container");
 const chatButton = document.querySelector("#chat-button");
 const leaderboardContainer = document.querySelector(".leaderboard-container");
 

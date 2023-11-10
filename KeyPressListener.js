@@ -14,14 +14,22 @@ class KeyPressListener {
          keySafe = true;
       }         
    };
+   this.keySpaceFunction = function(event) {
+      if (event.code === keyCode) {
+         keySafe = true;
+      }         
+   };
    document.addEventListener("keydown", this.keydownFunction);
    document.addEventListener("keyup", this.keyupFunction);
+   document.addEventListener("keyspace", this.keySpaceFunction);
    
   }
 
   unbind() { 
     document.removeEventListener("keydown", this.keydownFunction);
     document.removeEventListener("keyup", this.keyupFunction);
+    document.removeEventListener("keyspace", this.keySpaceFunction);
+   
   }
 
 

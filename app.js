@@ -1,5 +1,4 @@
-let gameStarted=false;
-let loadEnd=false;
+let gameLoadStarted=false;
 
 
 const mapData = {
@@ -219,7 +218,7 @@ function getRandomSafeSpot() {
 
 function handleArrowPress(xChange = 0, yChange = 0, key) {
   // Check if the game is not started or if it's started and loading has ended
-  if (!gameStarted || (gameStarted && loadEnd)) {
+  if (!gameLoadStarted ) {
     const newX = players[playerId].x + xChange;
     const newY = players[playerId].y + yChange;
 
@@ -230,7 +229,7 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
 
       if (isAdjacentToInteractiveBlock(x, y)) {
         // If adjacent to an interactive block, start the game
-        startGame(currentPlayer);
+        startLoad(currentPlayer);
         console.log("2");
         loadEnd = false;
       }
@@ -258,8 +257,8 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
   }
 }
 
-function startGame(player) {
-  gameStarted = true;
+function startLoad(player) {
+  gameLoadStarted = true;
 
   // Get the current player element
   const currentPlayerElement = playerElements[player.id];
@@ -297,9 +296,9 @@ function startGame(player) {
 
     // Set the width back to 0% to hide the loading bar after 2 seconds
     setTimeout(() => {
-      gameStarted = false;
+      gameLoadStarted = false;
       loadEnd = true;
-    }, 2200);
+    }, 2100);
   }, 1);
 }
 

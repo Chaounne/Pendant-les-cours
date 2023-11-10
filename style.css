@@ -28,7 +28,7 @@ html, body {
   position: relative;
   width: 240px;
   height: 208px;
-  background: url(map.png) no-repeat no-repeat;
+  background: url(images/map.png) no-repeat no-repeat;
   transform: scale(3);
   image-rendering: pixelated;
 }
@@ -268,7 +268,7 @@ button:active {
     position: relative;
     max-width: 100%;
     max-height: 100%;
-    background: url(map.png) no-repeat no-repeat;
+    background: url(images/map.png) no-repeat no-repeat;
     max-width: 100%;
     image-rendering: pixelated;}
 

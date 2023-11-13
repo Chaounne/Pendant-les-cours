@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=1" type="text/css">
+    <link rel="stylesheet" href="/style.css?v=5" type="text/css">
   </head>
   <body>
     <div class="game-container"></div>
@@ -16,32 +16,24 @@
       <button id="downButton">&darr;</button>
       <button id="rightButton">&rarr;</button>
     </div>
-    
+    <div class="titre">
+      <h1>Pendant les cours...</h1>
+    </div>
+
     <div class="player-info">
-     
-      <div class="titre">
-        <h1>Pendant les cours...</h1>
+      <div>
+        <label for="player-name">Pseudo</label>
+        <input id="player-name" maxlength="30" type="text" />
+          <button id="player-color">Change la couleur!</button>
+
       </div>
-    <label for="player-name">Pseudo</label>
-    <input id="player-name" maxlength="30" type="text" />
-    <div>
-      <button id="player-color">Change la couleur!</button>
     </div>
-    
-    </div>
-      
-     
-   
-    
-    
-   
+
     <div class="buttonChat">
       <button id="openChatButton"><i class="fas fa-comment"></i></button>
-
     </div>
   
     <div class="chat">
-    
       <div>
         <label for="chat-message">Chat</label>
         <input id="chat-message" maxlength="144" type="text" />    <button id="chat-button">Envoyer</button>
@@ -72,7 +64,7 @@
       firebase.initializeApp(firebaseConfig);
     </script>
 
-    <script src="/scripts/KeyPressListener.js?v=1"></script>
-    <script src="/scripts/app.js?v=1"></script>
+    <script src="/scripts/KeyPressListener.js?v=5"></script>
+    <script src="/scripts/app.js?v=5"></script>
   </body>
 </html>

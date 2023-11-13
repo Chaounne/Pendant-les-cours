@@ -7,8 +7,6 @@ body{
   overflow: hidden;
 }
 
-
-
 html, body {
   margin: 0;
   padding: 0;
@@ -19,11 +17,7 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-.titre{
-  width: 100%;
-  min-width: 350px;
-  align-items: center;
-}
+
 .game-container { 
   position: relative;
   width: 240px;
@@ -33,19 +27,9 @@ html, body {
   image-rendering: pixelated;
 }
 
-.loading-bar {
-  position: absolute;
-  top: -20px; /* Adjust this value based on your layout */
-  left: 0;
-  height: 2px;
-  width: 0%; /* Set initial width to 0 */
-  background-color: #0026ff; /* Green color for the loading bar */
-  transition: width 2s linear; /* Transition effect for the width change */
-}
-
 .leaderboard{
     position: absolute;
-    top: 0;
+    top: 10%;
     left: 0;
     padding: 1em;
     margin: 1em;
@@ -69,6 +53,17 @@ html, body {
   max-height: 170px;
 }
 
+.Arrows{
+  display: none;
+  margin-top: 120%;
+  position: absolute;
+}
+
+.Arrows-2{
+  display: none;
+  margin-top: 138%;
+  position: absolute;
+}
 
 .chat {
   position: fixed;
@@ -82,23 +77,24 @@ html, body {
   margin-bottom: 10px;
   display: none;
 }
-.Arrows{
-  display: none;
-  margin-top: 120%;
-  position: absolute;
-}
-.Arrows-2{
-  display: none;
-  margin-top: 138%;
-  position: absolute;
-}
+
 .chat-container{
+  background-color: rgba(0,0,0,0.44);
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
   overflow-y:auto;
+  overflow-x: auto;
   max-height: 100%;
-  /*set a limited height*/
-  max-height: 120px;
-  /*background-color: rgba(0,0,0,0.44);*/
+  height: 120px;
+  width: 20em;
+  padding-left: 0.5em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
 }
+
+
 .buttonChat{
   margin-left: 95%; 
   margin-top: 26%;
@@ -108,11 +104,20 @@ html, body {
 .player-info {
   position: absolute;
   top: 0;
-  
-  width: 100%;
+  /*width: 100%;*/
   padding: 1em;
   display: flex;
   gap: 0.5em;
+  align-items: center;
+}
+
+.titre{
+  position: absolute;
+  padding-left: 1em;
+  top: 0;
+  left: 0;
+  /*width: 100%;*/
+  min-width: 350px;
 }
 
 label {

@@ -55,7 +55,8 @@ const leaderboardContainer = document.querySelector(".leaderboard-container");
 
 // Sélectionnez le bouton et le conteneur du tchat
 const openChatButton = document.getElementById('openChatButton');
-const chatContainer = document.querySelector('.chat');
+const chatContainer = document.querySelector('.chat-container');
+const chat = document.querySelector('.chat');
 
 
 // ***** Fonctions *****
@@ -229,19 +230,6 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
 		const newX = players[playerId].x + xChange;
 		const newY = players[playerId].y + yChange;
 
-		if (key === "Space") {
-			const currentPlayer = players[playerId];
-			const x = currentPlayer.x;
-			const y = currentPlayer.y;
-
-			if (isAdjacentToInteractiveBlock(x, y)) {
-				// If adjacent to an interactive block, start the game
-				startLoad(currentPlayer);
-				console.log("2");
-				loadEnd = false;
-			}
-		}
-
 		if (!isSolid(newX, newY)) {
 			// Move to the next space if it's not solid
 			players[playerId].x = newX;
@@ -257,7 +245,7 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
 
 			// Update player data in the database
 			playerRef.set(players[playerId]);
-		// console.log(players);
+			// console.log(players);
 			// if(players[playerId].name=="MA REMS"){
 			//   window.location.href = "https://www.google.com/search?client=firefox-b-d&sca_esv=581232494&sxsrf=AM9HkKmaHuU0PP20Y67rf-JLAYMb7GVJwA:1699632736082&q=gays+kissing+nude&tbm=isch&source=lnms&sa=X&ved=2ahUKEwjIg-6r6bmCAxXAVaQEHXsvBRAQ0pQJegQIDRAB&biw=639&bih=663&dpr=1.5#imgrc=rbJT2R0uw0UhAM";
 
@@ -266,120 +254,6 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
 			attemptGrabCoin(newX, newY);
 		}
 	}
-}
-
-function startLoad(player) {
-	gameLoadStarted = true;
-	// Get the current player element
-	const currentPlayerElement = playerElements[player.id];
-
-	// Create or select the loading bar element
-	let loadingBar = currentPlayerElement.querySelector('.loading-bar');
-	if (!loadingBar) {
-		// If loading bar doesn't exist, create it
-		loadingBar = document.createElement('div');
-		loadingBar.classList.add('loading-bar');
-		loadingBar.style.width = '100%';
-		currentPlayerElement.appendChild(loadingBar);
-	} else {
-		// Check if the loading bar is already at 0%
-		if (loadingBar.style.width === '0%') {
-			// If so, set it to 100%
-			loadingBar.style.width = '100%';
-			// Append the loading bar to the player element
-			currentPlayerElement.appendChild(loadingBar);
-		}
-	}
-
-	// Set the width to 100% to show the loading bar
-	loadingBar.style.width = '100%';
-
-	// Check if the player is adjacent to an interactive block
-	if (isAdjacentToInteractiveBlock(player.x, player.y)) {
-		// Increment the player count
-		playerNb++;
-
-		// If there are two players, start the game
-		if (playerNb === 2) {
-			// Find the second player object
-			let currentPlayer2;
-			for (const playerId in players) {
-				if (playerId !== player.id) {
-					currentPlayer2 = players[playerId];
-					break;
-				}
-			}
-		
-			if (currentPlayer2) {
-				console.log(player,currentPlayer2.name)
-				startGame(player, currentPlayer2);
-				gameStarted=true;
-				gameLoadStarted = true;
-				console.log(gameLoadStarted);
-			}
-		
-			// Reset player count for the next game
-			playerNb = 0;
-		}
-	}
-
-	// Reset the width to 0% before starting the timeout to hide it
-	setTimeout(() => {
-		loadingBar.style.width = '0%';
-
-		// Set the width back to 0% to hide the loading bar after 2 seconds
-		setTimeout(() => {
-			if(!gameStarted){
-			gameLoadStarted = false;
-			}
-		}, 2300);
-	}, 20);
-}
-
-function startGame(player1, player2) {
-	// Prevent players from moving
-	gameLoadStarted = true;
-
-	// Display a message indicating the start of the game (you can customize this)
-	console.log("Game started! Players can't move.");
-	console.log(gameLoadStarted+"test");
-	// Transfer 10 coins from player1 to player2
-	if (player1.coins >= 10) {
-
-		playerRef.update({
-			coins: players[player1.id].coins -10 ,
-		})
-		playerHistoryRef.update({
-			coins: players[player1.id].coins,
-		})
-
-		playerRef.update({
-			coins: players[player2.id].coins + 10,
-		})
-		playerHistoryRef.update({
-			coins: players[player2.id].coins,
-		})
-
-		
-		console.log(player2)
-		console.log(`${player1.name} gave 10 coins to ${player2.name}.has now ${player2.coins}coins`);
-
-		// Update the player data in the database
-	 //firebase.database().ref(`players/${player2.id}`).update({ coins: player2.coins });
-
-		//firebase.database().ref(`players/${player1.id}`).update({ coins: player1.coins });
-		} else {
-		console.log(`${player1.name} doesn't have enough coins to give.`);
-	}
-
-	// Wait for a specific duration (e.g., 5 seconds)
-	setTimeout(() => {
-		// Allow players to move again
-		gameLoadStarted = false;
-
-		// Display a message indicating the end of the game (you can customize this)
-		console.log("Game ended! Players can move again.");
-	}, 10000); // Adjust the duration as needed
 }
 
 function initGame() {
@@ -507,15 +381,15 @@ function initGame() {
 	})
 
 	chatButton.addEventListener("click", () => {
-		//get the message from the input, message = username + message
-		const newMessage = `${players[playerId].name}: ${messageInput.value}`;
-	
 		//if the message is empty, don't send it
 		if (!messageInput.value || messageInput.value === "") {
 			return;
 		}
+		//get the message from the input, message = username + message
+		const newMessage = `${players[playerId].name} : ${messageInput.value}`;
 		chatRef = firebase.database().ref(`chat`);
 		chatRef.push(newMessage);
+
 		messageInput.value = "";
 	})
 
@@ -621,5 +495,5 @@ openChatButton.addEventListener('click', () => {
 	openChatButton.innerHTML = isChatOpen ? '<i class="fas fa-comment"></i>  ' : '<i class="fas fa-comment"></i>  ';
 
 	// Affichez ou masquez le conteneur du tchat en fonction de l'état
-	chatContainer.style.display = isChatOpen ? 'flex' : 'none';
+	chat.style.display = isChatOpen ? 'flex' : 'none';
 });

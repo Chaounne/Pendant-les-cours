@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <title>Pendant les cours...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <body>
+    <div class="game-container"></div>
+    <div class="Arrows">  
+      <button id="upButton">&uarr;</button></div>
+      <div class="Arrows-2">
+      <button id="leftButton">&larr;</button>
+      <button id="downButton">&darr;</button>
+      <button id="rightButton">&rarr;</button>
+    </div>
+    <div class="titre">
+      <h1>Pendant les cours...</h1>
+    </div>
+
+    <div class="player-info">
+      <div>
+        <label for="player-name">Pseudo</label>
+        <input id="player-name" maxlength="30" type="text" />
+          <button id="player-color">Change la couleur!</button>
+
+      </div>
+    </div>
+
+    <div class="buttonChat">
+      <button id="openChatButton"><i class="fas fa-comment"></i></button>
+    </div>
+  
+    <div class="chat">
+      <div>
+        <label for="chat-message">Chat</label>
+        <input id="chat-message" maxlength="144" type="text" />    <button id="chat-button">Envoyer</button>
+      </div>
+      <div class="chat-container" >
+      </div>
+    </div>
+ 
+    <div class="leaderboard">
+        <h1>Leaderboard - Pièces</h1>
+        <div class="leaderboard-container">
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyA_9v6IEVYlvDtVT8QUuMJTkbyotjNBlyU",
+        authDomain: "pendant-les-cours.firebaseapp.com",
+        databaseURL: "https://pendant-les-cours-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "pendant-les-cours",
+        storageBucket: "pendant-les-cours.appspot.com",
+        messagingSenderId: "121450160778",
+        appId: "1:121450160778:web:7838eb4a5dc89559d7c373"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="../src/KeyPressListener.js"></script>
+    <script src="../src/app.js"></script>
+  </body>
+</html>

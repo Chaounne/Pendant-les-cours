@@ -7,12 +7,17 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+let playerId;
+let playerRef;
+
+let coins = {};
+let coinElements = {};
+
 // Serve static files from the 'front-end' directory
-app.use(express.static(path.join(__dirname, 'front-end')));
 
 // Define a route to handle the initial HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/front-end/index.html'));
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 // Handle incoming WebSocket connections
@@ -27,11 +32,34 @@ io.on('connection', (socket) => {
     io.emit('message', data);
   });
 
+  function getKeyString(x, y) {
+    return `${x}x${y}`;
+  }
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
+   // Handle coin grabbing attempt
+ socket.on('attemptGrabCoin', (coordinates) => {
+  console.log('Coin s attempt at coordinates:', coordinates);
+
+
+    // Remove this key from data, then uptick Player's coin count
+    firebase.database().ref(`coins/${key}`).remove();
+    playerRef.update({
+      coins: players[playerId].coins + 1,
+      
+    });
+    
+    playerHistoryRef.update({
+      coins: players[playerId].coins,
+    });
+  
 });
+
+});
+
+
 
 // Start the server on port 3000
 const PORT = process.env.PORT || 3000;

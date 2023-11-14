@@ -4,6 +4,7 @@ let gameLoadStarted=false;
 let playerNb = 0; // Assuming you have a way to track the number of players
 let gameStarted = false;
 let playerHistoryRef;
+const socket = io();
 
 let playerId;
 let playerRef;
@@ -11,6 +12,7 @@ let players = {};
 let playerElements = {};
 let coins = {};
 let coinElements = {};
+
 let chatRef;
 
 // Initialisez une variable pour suivre l'état du tchat
@@ -65,9 +67,7 @@ const chat = document.querySelector('.chat');
 function randomFromArray(array) {
 	return array[Math.floor(Math.random() * array.length)];
 }
-function getKeyString(x, y) {
-	return `${x}x${y}`;
-}
+
 
 // Check if a player uid is in the database
 function isPlayerInDatabase(uid) {
@@ -116,7 +116,9 @@ function createName() {
 	]);
 	return `${prefix} ${animal}`;
 }
-
+function getKeyString(x, y) {
+    return `${x}x${y}`;
+  }
 // checks if a block is traversable by player
 function isSolid(x,y) {
 	const blockedNextSpace = mapData.blockedSpaces[getKeyString(x, y)];
@@ -211,17 +213,13 @@ function placeCoin() {
 }
 
 function attemptGrabCoin(x, y) {
+    // Use the socket variable to emit the 'attemptGrabCoin' event
 	const key = getKeyString(x, y);
+  
 	if (coins[key]) {
-		// Remove this key from data, then uptick Player's coin count
-		firebase.database().ref(`coins/${key}`).remove();
-		playerRef.update({
-			coins: players[playerId].coins + 1,
-		})
-		playerHistoryRef.update({
-			coins: players[playerId].coins,
-		})
+		    socket.emit('attemptGrabCoin', { x, y },key);
 	}
+
 }
 
 function handleArrowPress(xChange = 0, yChange = 0, key) {

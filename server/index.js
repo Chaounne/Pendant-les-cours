@@ -7,17 +7,32 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+
 let playerId;
 let playerRef;
 
 let coins = {};
 let coinElements = {};
+ src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"
+src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"
+ src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"
 
-// Serve static files from the 'front-end' directory
+      const firebaseConfig = {
+        apiKey: "AIzaSyA_9v6IEVYlvDtVT8QUuMJTkbyotjNBlyU",
+        authDomain: "pendant-les-cours.firebaseapp.com",
+        databaseURL: "https://pendant-les-cours-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "pendant-les-cours",
+        storageBucket: "pendant-les-cours.appspot.com",
+        messagingSenderId: "121450160778",
+        appId: "1:121450160778:web:7838eb4a5dc89559d7c373"
+      };
+      firebase.initializeApp(firebaseConfig);
+  
 
+app.use(express.static(path.join(__dirname, 'front-end')));
 // Define a route to handle the initial HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
+  res.sendFile(path.join(__dirname, '/front-end/index.html'));
 });
 
 // Handle incoming WebSocket connections

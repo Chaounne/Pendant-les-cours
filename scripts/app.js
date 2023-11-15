@@ -14,7 +14,7 @@ let coinElements = {};
 let chatRef;
 
 // Initialisez une variable pour suivre l'état du tchat
-let isChatOpen = false;
+let isChatOpen = true;
 
 
 // ***** Const *****

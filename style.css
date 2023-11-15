@@ -69,13 +69,12 @@ html, body {
   position: fixed;
   bottom: 0;
   right: 0;
-  margin: 1em; 
-  display: flex;
+  margin: 1em;
   flex-direction: column;
   gap: 0.5em;
   align-items: flex-start;
   margin-bottom: 10px;
-  display: none;
+  display: flex;
 }
 
 .chat-container{

@@ -59,64 +59,18 @@ const openChatButton = document.getElementById('openChatButton');
 const chatContainer = document.querySelector('.chat-container');
 const chat = document.querySelector('.chat');
 
+socket.emit('message',{ action: 'htmlElements', playerColors, gameContainer,playerNameInput,playerColorButton,messageInput,leaderboardContainer});
 
 // ***** Fonctions *****
 
 // Misc Helpers
-function randomFromArray(array) {
-	return array[Math.floor(Math.random() * array.length)];
-}
+
 function getKeyString(x, y) {
 	return `${x}x${y}`;
 }
 
 // Check if a player uid is in the database
-function isPlayerInDatabase(uid) {
-	return firebase.database().ref(`players_history/${uid}`).once("value").then((snapshot) => {
-		return snapshot.val() !== null;
-	})
-}
 
-// Generate random name
-function createName() {
-	const prefix = randomFromArray([
-		"GROS",
-		"MINI",
-		"SHINY",
-		"PRECIEUX",
-		"SUPER",
-		"COOL",
-		"BUCKET",
-		"AMONG",
-		"CRINGE",
-		"MEDIOCRE",
-		"RICHE",
-		"MA",
-		"MON",
-		"TES",
-		"TON",
-		"TA",
-		"HYPER",
-	]);
-	const animal = randomFromArray([
-		"SUS",
-		"US",
-		"STEVE",
-		"ROB",
-		"MERE",
-		"PERE",
-		"FRERE",
-		"MONOCLE",
-		"DRAGON",
-		"LOUIS",
-		"REMS",
-		"GYATZ",
-		"JSP",
-		"PROCESSEUR",
-		"EXTRA LARGE",
-	]);
-	return `${prefix} ${animal}`;
-}
 
 // checks if a block is traversable by player
 function isSolid(x,y) {
@@ -146,35 +100,6 @@ function isAdjacentToInteractiveBlock(x, y) {
 	}
 
 	return false;
-}
-
-function getRandomSafeSpot() {
-	// We don't look things up by key here, so just return an x/y
-	return randomFromArray([
-		{ x: 1, y: 4 },
-		{ x: 2, y: 4 },
-		{ x: 1, y: 5 },
-		{ x: 2, y: 6 },
-		{ x: 2, y: 8 },
-		{ x: 2, y: 9 },
-		{ x: 4, y: 8 },
-		{ x: 5, y: 5 },
-		{ x: 5, y: 8 },
-		{ x: 5, y: 10 },
-		{ x: 5, y: 11 },
-		{ x: 11, y: 7 },
-		{ x: 12, y: 7 },
-		{ x: 13, y: 7 },
-		{ x: 13, y: 6 },
-		{ x: 13, y: 8 },
-		{ x: 7, y: 6 },
-		{ x: 7, y: 7 },
-		{ x: 7, y: 8 },
-		{ x: 8, y: 8 },
-		{ x: 10, y: 8 },
-		{ x: 8, y: 8 },
-		{ x: 11, y: 4 },
-	]);
 }
 
 // Put the 5 richest players in the leaderboard-container, the players are in the database in the players_history section
@@ -213,11 +138,14 @@ function placeCoin() {
 
 function attemptGrabCoin(x, y) {
 	const key = getKeyString(x, y);
+
 	if (coins[key]) {
 		// Remove this key from data, then uptick Player's coin count
-		
-		socket.emit('message',{ action: 'grabCoinAttempt', x, y, playerRef, playerHistoryRef,key });
+		console.log("Coins avant"+players[playerId].coins);
+		socket.emit('message',{ action: 'grabCoinAttempt', x, y, playerRef, playerHistoryRef,key, players,playerId});
+		console.log("Coins apres"+players[playerId].coins);
 	}
+	
 }
 
 function handleArrowPress(xChange = 0, yChange = 0, key) {
@@ -254,7 +182,7 @@ function handleArrowPress(xChange = 0, yChange = 0, key) {
 
 function initGame() {
 	new KeyPressListener("Space", ()=>handleArrowPress(0,0,"Space"))
-
+console.log("testDEDE");
 	updateLeaderboard();
 	new KeyPressListener("ArrowUp", () => handleArrowPress(0, -1))
 	new KeyPressListener("ArrowDown", () => handleArrowPress(0, 1))
@@ -415,58 +343,12 @@ function initGame() {
 }
 
 firebase.auth().onAuthStateChanged((user) => {
-	console.log("test");
 	
 	if (user) {
 		// Logged in!
-		playerId = user.uid;
-		socket.emit('message',{ action: 'Player', user });
-		playerRef = firebase.database().ref(`players/${playerId}`);
-
-		const name = createName();
-		playerNameInput.value = name;
-
-		const {x, y} = getRandomSafeSpot();
-
-		// Check if the player is in the database
-		isPlayerInDatabase(playerId).then((isInDatabase) => {
-			if (isInDatabase) {
-			playerHistoryRef = firebase.database().ref(`players_history/${playerId}`);
-			// get the number of coins and the name of the player from the database to the PlayerRef
-			playerHistoryRef.once("value", (snapshot) => {
-				const playerHistory = snapshot.val();
-				playerRef.update({
-					id: playerId,
-					name: playerHistory.name,
-					coins: playerHistory.coins,
-					color: playerHistory.color,
-					x,
-					y,
-				})
-			})
-			return;
-			}
-			// Add the player to the database players_history and players
-			firebase.database().ref(`players_history/${playerId}`).set({
-				id: playerId,
-				name,
-				direction: "right",
-				color: randomFromArray(playerColors),
-				x,
-				y,
-				coins: 0,
-			})
-			// If the player is not in the database, create a new player
-			playerRef.set({
-				id: playerId,
-				name,
-				direction: "right",
-				color: randomFromArray(playerColors),
-				x,
-				y,
-				coins: 0,
-			})
-		})
+		console.log("TEST CO");
+		socket.emit('message',{ action: 'Co', user});
+		
 		
 		// Save data to the database when the player leaves
 		playerRef.onDisconnect().remove();
